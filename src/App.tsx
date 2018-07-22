@@ -1,22 +1,33 @@
 import * as React from 'react';
-import './App.css';
+import { inject, observer } from 'mobx-react';
 
+import './App.css';
 import logo from './logo.svg';
 
-class App extends React.Component {
-  public render() {
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+
+@inject('routing', 'counterStore')
+@observer
+export class App extends React.Component<any> {
+  render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to React + Mobx + React Router V4</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
+          <Link to="/counter">Counter</Link>,
+          <Link to="/about">About</Link>
         </p>
+        <div>
+          {this.props.children}
+        </div>
       </div>
     );
   }
 }
 
-export default App;
+// NOTE: hack https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/blocked-updates.md#quick-solution
+export default withRouter(App)
