@@ -1,35 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
 import { Provider } from 'mobx-react';
-import { observable, action } from 'mobx'
-import { observer } from 'mobx-react';
-import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
+import { syncHistoryWithStore } from 'mobx-react-router';
 import { Router, Route } from 'react-router';
 import { Redirect } from 'react-router-dom'
-import App from './App';
 
-import './index.css';
+import App from './containers/App';
+import CounterPage from './containers/CounterPage'
+import { routingStore, browserHistory, counterStore} from './stores'
 import registerServiceWorker from './registerServiceWorker';
 
+import './index.css';
+
 // Stores
-const browserHistory = createBrowserHistory();
-const routingStore = new RouterStore();
-
-class CounterStore {
-  @observable counter = Number(location.href.split(/\//)[4]) || 1
-  @observable isOk = true
-
-  @action setCounter(num: string) {
-    this.counter += Number(num)
-  }
-
-  @action increment() {
-    this.counter += 1
-  }
-
-}
-const counterStore = new CounterStore()
 
 const stores = {
   counterStore,
@@ -45,16 +28,6 @@ const AboutPage = () => (
     <p>Just a boilerplate to test React + Mobx + React Router V4</p>
   </div>
 )
-
-const CounterPage = observer(() => (
-  <div>
-    <button onClick={() => {
-      counterStore.increment()
-      routingStore.replace(`/counter/${counterStore.counter.toString()}`)
-    }} >Counter: {counterStore.counter}
-    </button>
-  </div>
-))
 
 ReactDOM.render(
   <Provider {...stores}>
